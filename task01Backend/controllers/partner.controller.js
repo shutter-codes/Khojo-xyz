@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { checkAdmin, authenticateUser } = require("../middlewares/auth");
 
 const partnerSchema = require("../models/partnerSchema");
 
-router.post("/", async (req, res) => {
+router.post("/", authenticateUser, checkAdmin,async (req, res) => {
   const { partnerName, desc, experience } = req.body;
   try {
     const partner = new partnerSchema({ partnerName, desc, experience });
@@ -30,7 +31,7 @@ router.get("/", async (req, res) => {
 });
 
 // Update
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateUser, checkAdmin,async (req, res) => {
   const { id } = req.params;
   const { partnerName, desc, experience } = req.body;
 
@@ -57,7 +58,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateUser, checkAdmin,async (req, res) => {
   const { id } = req.params;
 
   try {

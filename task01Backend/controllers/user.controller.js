@@ -7,7 +7,6 @@ const userSchema = require("../models/userSchema");
 
 // verifying a authenticate user
 
-
 // register a new user
 router.post("/register", async (req, res) => {
   try {
@@ -62,19 +61,17 @@ router.post("/login", async (req, res) => {
 
     // Generate a JWT token
     const token = jwt.sign(
-      { userId: user._id, username: user.username },
+      { userId: user._id, username: user.username, role: user.role },
       process.env.SECRET_KEY,
       { expiresIn: "1h" }
     );
 
-    res
-      .status(200)
-      .json({
-        token,
-        userId: user._id,
-        username: user.username,
-        role: user.role,
-      });
+    res.status(200).json({
+      token,
+      userId: user._id,
+      username: user.username,
+      role: user.role,
+    });
     if (user.role == "admin") {
       console.log("admin logged in successfully");
     } else {
@@ -85,7 +82,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
+const tokenBlacklist = [];
 // logout a user
 router.post("/logout", (req, res) => {
   const token = req.headers.authorization;
