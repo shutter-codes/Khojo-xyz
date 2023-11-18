@@ -3,9 +3,11 @@ const router = express.Router();
 
 const About = require("../models/aboutSchema");
 
-// CRUD operations for the About section
+// injected a middleware to check if the user is admin
+const isAdmin = require("../middlewares/auth");
 
-// Create
+
+// Create 
 router.post("/", async (req, res) => {
     const { content } = req.body;
     try {
@@ -18,7 +20,7 @@ router.post("/", async (req, res) => {
   });
 
   // Read
-router.get("/", async (req, res) => {
+router.get("/", isAdmin, async (req, res) => {
     try {
       const about = await About.find({});
   
@@ -26,10 +28,10 @@ router.get("/", async (req, res) => {
         return res.status(404).json({ error: "Not found" });
       }
   
-      // Send the data back to the client
+     
       res.status(200).json({ about });
     } catch (error) {
-      console.error(error); // Log the error for debugging purposes
+      console.error(error); 
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
@@ -52,7 +54,7 @@ router.put("/:id", async (req, res) => {
   
       res.json(about);
     } catch (error) {
-      console.error(error); // Log the error for debugging purposes
+      console.error(error); 
       res.status(500).json({ error: "Internal Server Error" });
     }
   });

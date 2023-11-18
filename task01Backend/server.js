@@ -8,6 +8,7 @@ const userController = require("./controllers/user.controller");
 const aboutController = require("./controllers/about.controller")
 const partnerController = require("./controllers/partner.controller")
 const {dbConnection} = require("./dbConnection");
+const authenticateUser = require("./middlewares/auth");
 
 
 // Middleware
@@ -15,14 +16,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const isAdmin = async (req, res, next) => {
-//   if (req.user.role == "admin") {
-//     return next();
-//   }
-//   return res.status(401).json({
-//     error: "Unauthorized!"
-//   });
-// };
 
 
 
